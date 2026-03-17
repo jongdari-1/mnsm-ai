@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 기반 발주지원 7대 솔루션 | M&M Solutions</title>
+<!-- 맑은 고딕 폰트 사용 (Windows 기본 탑재 / 웹 폴백 포함) -->
+<!-- EmailJS SDK — 브라우저에서 직접 메일 발송 (서버 불필요) -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+<style>
+/* ============================================================
+   ✏️  유지관리 가이드
+   ------------------------------------------------------------
+   1. 색상 변경: :root 섹션의 CSS 변수만 수정
+   2. 회사 정보: CONFIG 섹션의 값 수정
+   3. 통계 수치: .stat-data 속성(data-value) 수정
+   4. 솔루션 내용: #solutions-data 스크립트 배열 수정
+   5. 기대효과: #effects-data 스크립트 배열 수정
+   ============================================================ */
+
+/* ---------- 1. 디자인 토큰 (색상·폰트·간격) ---------- */
+:root {
+  --navy:      #0B1F3A;
+  --navy-mid:  #142845;
+  --blue:      #1A56A0;
+  --blue-lt:   #2B73CC;
+  --accent:    #E8A020;
+  --accent-lt: #F5C547;
+  --teal:      #0D7E8A;
+  --teal-lt:   #12A3B2;
+  --light:     #F4F7FB;
+  --white:     #FFFFFF;
+  --text-dk:   #0B1F3A;
+  --text-md:   #334E6B;
+  --text-lt:   #6B85A0;
+  --border:    rgba(255,255,255,0.12);
+
+  --font-head: 'Malgun Gothic', '맑은 고딕', 'Apple SD Gothic Neo', sans-serif;
+  --font-body: 'Malgun Gothic', '맑은 고딕', 'Apple SD Gothic Neo', sans-serif;
+
+  --r-sm: 8px;
+  --r-md: 14px;
+  --r-lg: 20px;
+
+  --shadow-card: 0 4px 24px rgba(11,31,58,0.10);
+  --shadow-hero: 0 8px 48px rgba(11,31,58,0.22);
+}
+
+/* ---------- 2. 리셋 & 기본 ---------- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  font-family: var(--font-body);
+  background: var(--light);
+  color: var(--text-dk);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+img { max-width: 100%; display: block; }
+a { color: inherit; text-decoration: none; }
+
+/* ---------- 3. 공통 레이아웃 ---------- */
+.container { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+section { padding: 96px 0; }
+.section-label {
+  display: inline-block;
+  font-size: 11px; font-weight: 700; letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(232,160,32,0.12);
+  border: 1px solid rgba(232,160,32,0.3);
+  border-radius: 20px;
+  padding: 4px 14px;
+  margin-bottom: 18px;
+}
+.section-title {
+  font-family: var(--font-head);
+  font-size: clamp(26px, 3.5vw, 38px);
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--text-dk);
+  margin-bottom: 14px;
+}
+.section-sub {
+  font-size: 16px;
+  color: var(--text-lt);
+  max-width: 560px;
+  line-height: 1.75;
+}
+.dark-bg { background: var(--navy); color: var(--white); }
+.dark-bg .section-title { color: var(--white); }
+.dark-bg .section-sub { color: rgba(255,255,255,0.65); }
+
+/* ---------- 4. 네비게이션 ---------- */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(11,31,58,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 0;
+  transition: padding .3s;
+}
+.nav-inner {
+  display: flex; align-items: center; justify-content: space-between;
+  max-width: 1080px; margin: 0 auto; padding: 0 24px;
+}
+.nav-logo {
+  font-family: var(--font-head);
+  font-size: 18px; font-weight: 700;
+  color: var(--white);
+  display: flex; align-items: center; gap: 8px;
+}
+.nav-logo span:not(.nav-product) {
+  background: transparent;
+  color: rgba(255,255,255,0.55);
+  font-size: 18px; font-weight: 500; letter-spacing: 0;
+  padding: 0;
+  border-radius: 0;
+}
+.nav-logo-sep {
+  color: rgba(255,255,255,0.25);
+  font-size: 16px;
+  font-weight: 300;
+}
+.nav-product {
+  background: var(--accent) !important;
+  color: var(--navy) !important;
+  font-size: 14px !important; font-weight: 700 !important;
+  padding: 6px 16px !important;
+  border-radius: 20px !important;
+  letter-spacing: 0 !important;
+  white-space: nowrap;
+}
+.nav-links { display: flex; gap: 32px; list-style: none; }
+.nav-links a {
+  font-size: 13px; font-weight: 500;
+  color: rgba(255,255,255,0.75);
+  transition: color .2s;
+}
+.nav-links a:hover { color: var(--accent-lt); }
+.nav-cta {
+  background: var(--accent);
+  color: var(--navy) !important;
+  font-weight: 700 !important;
+  padding: 7px 18px;
+  border-radius: 20px;
+  transition: background .2s, transform .15s !important;
+}
+.nav-cta:hover { background: var(--accent-lt); transform: scale(1.04); }
+
+/* ---------- 5. 히어로 ---------- */
+#hero {
+  min-height: 100vh;
+  background: linear-gradient(140deg, #071628 0%, #0B1F3A 45%, #0f2d50 100%);
+  display: flex; align-items: center;
+  padding-top: 80px;
+  position: relative;
+  overflow: hidden;
+}
+.hero-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+.hero-glow {
+  position: absolute;
+  width: 600px; height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(26,86,160,0.35) 0%, transparent 70%);
+  top: -100px; right: -100px;
+  pointer-events: none;
+}
+.hero-glow2 {
+  position: absolute;
+  width: 400px; height: 400px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(13,126,138,0.25) 0%, transparent 70%);
+  bottom: -50px; left: 10%;
+  pointer-events: none;
+}
+.hero-content { position: relative; z-index: 2; }
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(232,160,32,0.15);
+  border: 1px solid rgba(232,160,32,0.4);
+  border-radius: 20px;
+  padding: 6px 16px;
+  font-size: 12px; font-weight: 600; letter-spacing: .08em;
+  color: var(--accent-lt);
+  margin-bottom: 28px;
+  animation: fadeDown .6s ease both;
+}
+.hero-badge::before {
+  content: '';
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--accent);
+  animation: pulse 2s infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(.8)} }
+.hero-title {
+  font-family: var(--font-head);
+  font-size: clamp(34px, 5.5vw, 62px);
+  font-weight: 900;
+  line-height: 1.2;
+  color: var(--white);
+  margin-bottom: 12px;
+  animation: fadeDown .7s .1s ease both;
+}
+.hero-title em {
+  font-style: normal;
+  background: linear-gradient(90deg, var(--accent), var(--accent-lt));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.hero-tagline {
+  font-size: clamp(15px, 1.8vw, 18px);
+  color: rgba(255,255,255,0.65);
+  max-width: 540px;
+  line-height: 1.75;
+  margin-bottom: 42px;
+  animation: fadeDown .7s .2s ease both;
+}
+.hero-actions {
+  display: flex; flex-wrap: wrap; gap: 14px;
+  animation: fadeDown .7s .3s ease both;
+}
+.btn-primary {
+  background: var(--accent);
+  color: var(--navy);
+  font-weight: 700; font-size: 15px;
+  padding: 14px 32px;
+  border-radius: 40px;
+  border: none; cursor: pointer;
+  transition: background .2s, transform .15s, box-shadow .2s;
+  box-shadow: 0 4px 20px rgba(232,160,32,0.4);
+}
+.btn-primary:hover { background: var(--accent-lt); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(232,160,32,0.45); }
+.btn-outline {
+  background: transparent;
+  color: var(--white);
+  font-weight: 500; font-size: 15px;
+  padding: 13px 30px;
+  border-radius: 40px;
+  border: 1px solid rgba(255,255,255,0.3);
+  cursor: pointer;
+  transition: border-color .2s, background .2s;
+}
+.btn-outline:hover { border-color: rgba(255,255,255,0.6); background: rgba(255,255,255,0.07); }
+.hero-stats {
+  display: flex; gap: 40px; flex-wrap: wrap;
+  margin-top: 64px;
+  padding-top: 40px;
+  border-top: 1px solid var(--border);
+  animation: fadeDown .7s .4s ease both;
+}
+.hero-stat-num {
+  font-family: var(--font-head);
+  font-size: 36px; font-weight: 700;
+  color: var(--accent-lt);
+  line-height: 1;
+}
+.hero-stat-label { font-size: 13px; color: rgba(255,255,255,0.55); margin-top: 5px; }
+
+@keyframes fadeDown { from{opacity:0;transform:translateY(-16px)} to{opacity:1;transform:translateY(0)} }
+
+/* ---------- 6. 현황 섹션 ---------- */
+#pain .container { text-align: center; }
+.pain-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 52px;
+}
+.pain-card {
+  background: var(--white);
+  border-radius: var(--r-lg);
+  padding: 36px 28px;
+  box-shadow: var(--shadow-card);
+  border: 1px solid rgba(11,31,58,0.07);
+  transition: transform .25s, box-shadow .25s;
+  position: relative;
+  overflow: hidden;
+}
+.pain-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--blue), var(--teal));
+}
+.pain-card:hover { transform: translateY(-6px); box-shadow: 0 12px 40px rgba(11,31,58,0.14); }
+.pain-pct {
+  font-family: var(--font-head);
+  font-size: 54px; font-weight: 900;
+  color: var(--blue);
+  line-height: 1;
+  margin-bottom: 12px;
+  counter-reset: none;
+}
+.pain-label { font-size: 17px; font-weight: 700; color: var(--text-dk); margin-bottom: 10px; }
+.pain-desc { font-size: 13px; color: var(--text-lt); line-height: 1.65; }
+.pain-source { font-size: 11px; color: var(--text-lt); margin-top: 40px; opacity: .7; }
+
+/* ---------- 7. 솔루션 개요 ---------- */
+#overview { background: var(--navy); }
+.overview-header { text-align: center; margin-bottom: 56px; }
+.sol-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.sol-grid-2 { grid-template-columns: repeat(3, 1fr); }
+.sol-card {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: var(--r-md);
+  padding: 24px 20px;
+  transition: background .25s, border-color .25s, transform .25s;
+  cursor: default;
+}
+.sol-card:hover {
+  background: rgba(255,255,255,0.10);
+  border-color: rgba(232,160,32,0.4);
+  transform: translateY(-4px);
+}
+.sol-id {
+  display: inline-block;
+  font-size: 11px; font-weight: 800; letter-spacing: .1em;
+  background: var(--accent);
+  color: var(--navy);
+  border-radius: 6px;
+  padding: 3px 9px;
+  margin-bottom: 14px;
+}
+.sol-name { font-size: 15px; font-weight: 700; color: var(--white); margin-bottom: 6px; }
+.sol-kpi { font-size: 12px; color: var(--accent-lt); font-weight: 600; }
+.sol-stage {
+  font-size: 11px; color: rgba(255,255,255,0.4);
+  margin-top: 10px;
+}
+.sol-note {
+  text-align: center;
+  font-size: 13px;
+  color: rgba(255,255,255,0.5);
+  margin-top: 32px;
+  border-top: 1px solid var(--border);
+  padding-top: 24px;
+}
+
+/* ---------- 8. 업무흐름 매핑 ---------- */
+#flow { background: var(--light); }
+.flow-header { text-align: center; margin-bottom: 52px; }
+.flow-steps {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 10px;
+  margin-bottom: 32px;
+}
+.flow-step {
+  background: var(--white);
+  border-radius: var(--r-md);
+  padding: 18px 10px;
+  text-align: center;
+  border: 2px solid transparent;
+  transition: border-color .2s, box-shadow .2s;
+  position: relative;
+}
+.flow-step.highlight { border-color: var(--accent); box-shadow: 0 4px 20px rgba(232,160,32,0.22); }
+.flow-step-num {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--navy);
+  color: var(--white);
+  font-size: 13px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 10px;
+}
+.flow-step.highlight .flow-step-num { background: var(--accent); color: var(--navy); }
+.flow-step-name { font-size: 12px; font-weight: 600; color: var(--text-dk); margin-bottom: 6px; }
+.flow-stars { font-size: 11px; color: var(--accent); margin-bottom: 10px; }
+.flow-badges { display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; }
+.flow-badge {
+  font-size: 10px; font-weight: 800; letter-spacing: .05em;
+  background: var(--navy);
+  color: var(--white);
+  border-radius: 4px;
+  padding: 2px 6px;
+}
+.flow-step.highlight .flow-badge { background: var(--blue); }
+.flow-legend {
+  background: rgba(232,160,32,0.08);
+  border: 1px solid rgba(232,160,32,0.25);
+  border-radius: var(--r-sm);
+  padding: 14px 20px;
+  font-size: 13px;
+  color: var(--text-md);
+  text-align: center;
+}
+.flow-legend strong { color: var(--navy); }
+
+/* ---------- 9. 솔루션 상세 ---------- */
+#solutions { background: var(--white); }
+.sol-detail-group { margin-bottom: 72px; }
+.sol-detail-group:last-child { margin-bottom: 0; }
+.sol-group-header {
+  display: flex; align-items: center; gap: 16px;
+  margin-bottom: 32px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid var(--light);
+}
+.sol-group-icon {
+  width: 52px; height: 52px; border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px;
+  flex-shrink: 0;
+}
+.sol-group-title { font-family: var(--font-head); font-size: 22px; font-weight: 700; color: var(--text-dk); }
+.sol-group-sub { font-size: 14px; color: var(--text-lt); margin-top: 2px; }
+.sol-detail-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.sol-detail-cards.col2 { grid-template-columns: repeat(2, 1fr); }
+.sol-detail-card {
+  background: var(--light);
+  border-radius: var(--r-md);
+  padding: 28px 24px;
+  border: 1px solid rgba(11,31,58,0.07);
+  transition: box-shadow .25s, transform .25s;
+  position: relative;
+}
+.sol-detail-card:hover { box-shadow: var(--shadow-card); transform: translateY(-4px); }
+.sol-detail-id {
+  display: inline-block;
+  font-size: 11px; font-weight: 800;
+  background: var(--navy); color: var(--white);
+  border-radius: 6px; padding: 2px 9px;
+  margin-bottom: 14px;
+}
+.sol-detail-name { font-size: 17px; font-weight: 700; color: var(--text-dk); margin-bottom: 6px; }
+.sol-detail-kpi {
+  display: inline-block;
+  font-size: 12px; font-weight: 700;
+  color: var(--teal);
+  background: rgba(13,126,138,0.10);
+  border-radius: 20px;
+  padding: 3px 12px;
+  margin-bottom: 16px;
+}
+.sol-detail-desc { font-size: 14px; color: var(--text-md); line-height: 1.75; }
+.sol-detail-note {
+  margin-top: 14px;
+  padding: 10px 14px;
+  background: rgba(26,86,160,0.07);
+  border-left: 3px solid var(--blue);
+  border-radius: 0 var(--r-sm) var(--r-sm) 0;
+  font-size: 12px; color: var(--blue);
+  line-height: 1.6;
+}
+
+/* ---------- 10. 기대효과 ---------- */
+#effects { background: var(--navy); }
+.effects-header { text-align: center; margin-bottom: 56px; }
+.effects-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+.effect-card {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: var(--r-lg);
+  padding: 36px 32px;
+  display: flex; align-items: flex-start; gap: 24px;
+  transition: background .25s, transform .25s;
+}
+.effect-card:hover { background: rgba(255,255,255,0.10); transform: translateY(-4px); }
+.effect-num {
+  font-family: var(--font-head);
+  font-size: 52px; font-weight: 900;
+  color: var(--accent-lt);
+  line-height: 1;
+  flex-shrink: 0;
+  min-width: 120px;
+}
+.effect-title { font-size: 18px; font-weight: 700; color: var(--white); margin-bottom: 8px; }
+.effect-desc { font-size: 14px; color: rgba(255,255,255,0.6); line-height: 1.7; }
+
+/* ---------- 11. 신뢰성 3대 체계 ---------- */
+#quality { background: var(--light); }
+.quality-header { text-align: center; margin-bottom: 52px; }
+.quality-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.quality-card {
+  background: var(--white);
+  border-radius: var(--r-lg);
+  padding: 36px 28px;
+  box-shadow: var(--shadow-card);
+  border-top: 4px solid transparent;
+}
+.quality-card.q1 { border-top-color: var(--blue); }
+.quality-card.q2 { border-top-color: var(--teal); }
+.quality-card.q3 { border-top-color: var(--accent); }
+.quality-icon { font-size: 32px; margin-bottom: 16px; }
+.quality-title { font-size: 20px; font-weight: 700; color: var(--text-dk); margin-bottom: 20px; }
+.quality-list { list-style: none; }
+.quality-list li {
+  font-size: 14px; color: var(--text-md);
+  padding: 7px 0;
+  border-bottom: 1px solid var(--light);
+  display: flex; align-items: flex-start; gap: 10px;
+  line-height: 1.6;
+}
+.quality-list li:last-child { border-bottom: none; }
+.quality-list li::before {
+  content: '✓';
+  color: var(--teal);
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* ---------- 12. CTA / 마무리 ---------- */
+#cta {
+  background: linear-gradient(140deg, #071628 0%, #0B1F3A 60%, #0f3258 100%);
+  text-align: center;
+  padding: 100px 0;
+  position: relative;
+  overflow: hidden;
+}
+#cta::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
+.cta-content { position: relative; z-index: 2; }
+.cta-title {
+  font-family: var(--font-head);
+  font-size: clamp(28px, 4vw, 46px);
+  font-weight: 900;
+  color: var(--white);
+  margin-bottom: 16px;
+  line-height: 1.3;
+}
+.cta-title em { font-style: normal; color: var(--accent-lt); }
+.cta-sub {
+  font-size: 17px; color: rgba(255,255,255,0.6);
+  margin-bottom: 42px;
+  max-width: 500px; margin-left: auto; margin-right: auto;
+  line-height: 1.7;
+}
+.cta-meta {
+  margin-top: 48px;
+  font-size: 13px; color: rgba(255,255,255,0.35);
+  display: flex; justify-content: center; flex-wrap: wrap; gap: 6px 20px;
+}
+.cta-meta span::before { content: '|'; margin-right: 20px; opacity: .4; }
+.cta-meta span:first-child::before { display: none; }
+
+/* ---------- 13. 푸터 ---------- */
+footer {
+  background: #050f1c;
+  padding: 28px 0;
+  text-align: center;
+  font-size: 12px;
+  color: rgba(255,255,255,0.3);
+}
+
+/* ---------- 14. 스크롤 애니메이션 ---------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity .65s ease, transform .65s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-delay-1 { transition-delay: .1s; }
+.reveal-delay-2 { transition-delay: .2s; }
+.reveal-delay-3 { transition-delay: .3s; }
+
+/* ---------- 15. 반응형 ---------- */
+@media (max-width: 900px) {
+  .pain-grid, .sol-grid, .quality-grid { grid-template-columns: 1fr 1fr; }
+  .sol-grid-2, .sol-detail-cards, .sol-detail-cards.col2 { grid-template-columns: 1fr; }
+  .flow-steps { grid-template-columns: repeat(4, 1fr); }
+  .effects-grid { grid-template-columns: 1fr; }
+  .nav-links { display: none; }
+}
+@media (max-width: 600px) {
+  .pain-grid, .sol-grid, .quality-grid, .flow-steps { grid-template-columns: 1fr; }
+  section { padding: 60px 0; }
+  .hero-stats { flex-direction: column; gap: 24px; }
+  .effect-card { flex-direction: column; gap: 12px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===================== NAV ===================== -->
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo">
+      <span class="nav-product">보급형 AI 발주 지원 솔루션</span>
+      <span class="nav-logo-sep"> | </span><span>M&M Solutions</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#pain">현황</a></li>
+      <li><a href="#overview">솔루션</a></li>
+      <li><a href="#flow">업무흐름</a></li>
+      <li><a href="#solutions">상세기능</a></li>
+      <li><a href="#effects">기대효과</a></li>
+      <li><a href="#cta" class="nav-cta">문의하기</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ===================== HERO ===================== -->
+<section id="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+  <div class="container hero-content">
+    <div class="hero-badge">공공 정보화사업 발주담당자를 위한 솔루션</div>
+    <h1 class="hero-title">
+      AI 기반 발주지원<br>
+      <em>7대 솔루션</em>
+    </h1>
+    <p class="hero-tagline">
+      RFP 작성부터 FP 측정·검증, 법제도 진단까지<br>
+      발주 전 단계를 AI가 지원합니다
+    </p>
+    <div class="hero-actions">
+      <button class="btn-primary" onclick="document.getElementById('solutions').scrollIntoView({behavior:'smooth'})">솔루션 살펴보기</button>
+      <button class="btn-outline" onclick="document.getElementById('cta').scrollIntoView({behavior:'smooth'})">문의</button>
+    </div>
+    <div class="hero-stats">
+      <div>
+        <div class="hero-stat-num">70%↓</div>
+        <div class="hero-stat-label">RFP 작성 시간 단축</div>
+      </div>
+      <div>
+        <div class="hero-stat-num">100%</div>
+        <div class="hero-stat-label">법제도 준수율</div>
+      </div>
+      <div>
+        <div class="hero-stat-num">95%↑</div>
+        <div class="hero-stat-label">FP 측정 정확도</div>
+      </div>
+      <div>
+        <div class="hero-stat-num">50%↓</div>
+        <div class="hero-stat-label">과업심의 소요 시간</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== PAIN ===================== -->
+<section id="pain">
+  <div class="container">
+    <div style="text-align:center; margin-bottom:52px;">
+      <div class="section-label">발주담당자의 현실</div>
+      <h2 class="section-title">현장의 어려움, 데이터로 확인합니다</h2>
+      <p class="section-sub" style="margin:0 auto;">발주담당자 설문조사 결과, 공공 정보화사업 발주 전 과정에서 전문성 부족이 핵심 과제로 지목되었습니다.</p>
+    </div>
+    <div class="pain-grid" id="pain-grid"></div>
+    <p class="pain-source" style="text-align:center;margin-top:28px;">출처: 한국정보화진흥원 발주관리 실태조사 및 업계 분석 종합</p>
+  </div>
+</section>
+
+<!-- ===================== OVERVIEW ===================== -->
+<section id="overview" class="dark-bg">
+  <div class="container">
+    <div class="overview-header">
+      <div class="section-label">7대 AI 솔루션</div>
+      <h2 class="section-title">발주 전 단계를 커버하는 통합 솔루션</h2>
+      <p class="section-sub" style="margin:0 auto;">각 솔루션은 발주 7개 절차 중 난이도가 높은 단계에 집중 배치됩니다.</p>
+    </div>
+    <div class="sol-grid" id="sol-grid-1"></div>
+    <div class="sol-grid sol-grid-2" id="sol-grid-2" style="margin-top:16px;"></div>
+    <p class="sol-note">각 솔루션은 발주 전단계 7개 절차 중 발주담당자의 난이도가 높은 단계에 집중 배치됩니다.</p>
+  </div>
+</section>
+
+<!-- ===================== FLOW ===================== -->
+<section id="flow">
+  <div class="container">
+    <div class="flow-header">
+      <div class="section-label">업무흐름 매핑</div>
+      <h2 class="section-title">발주 절차 × 솔루션 배치 현황</h2>
+      <p class="section-sub" style="margin:0 auto;">고난이도 단계에 솔루션을 집중 배치하여 핵심 Pain Point를 해소합니다.</p>
+    </div>
+    <div class="flow-steps" id="flow-steps"></div>
+    <div class="flow-legend">
+      <strong>고난이도 집중 배치:</strong> 4단계(★★★★)와 5단계(★★★★★)에 솔루션이 집중 배치되어 발주담당자의 핵심 Pain Point를 해소합니다.
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SOLUTIONS ===================== -->
+<section id="solutions">
+  <div class="container">
+    <div style="text-align:center; margin-bottom:56px;">
+      <div class="section-label">솔루션 상세</div>
+      <h2 class="section-title">7대 솔루션 주요 기능</h2>
+    </div>
+    <div id="sol-detail-groups"></div>
+  </div>
+</section>
+
+<!-- ===================== EFFECTS ===================== -->
+<section id="effects" class="dark-bg">
+  <div class="container">
+    <div class="effects-header">
+      <div class="section-label">도입 기대효과</div>
+      <h2 class="section-title">정량적으로 검증된 성과</h2>
+      <p class="section-sub" style="margin:0 auto;">AI 자동화와 이중 검증 체계로 발주 품질과 효율을 동시에 향상시킵니다.</p>
+    </div>
+    <div class="effects-grid" id="effects-grid"></div>
+  </div>
+</section>
+
+<!-- ===================== QUALITY ===================== -->
+<section id="quality">
+  <div class="container">
+    <div class="quality-header">
+      <div class="section-label">품질 3대 체계</div>
+      <h2 class="section-title">가독성 · 객관성 · 신뢰성 향상</h2>
+    </div>
+    <div class="quality-grid">
+      <div class="quality-card q1 reveal">
+        <div class="quality-icon">📄</div>
+        <div class="quality-title">가독성 향상</div>
+        <ul class="quality-list">
+          <li>표준 템플릿 자동 적용으로 일관된 문서 구조</li>
+          <li>요구사항 분류·번호 체계 자동 부여</li>
+          <li>AI 기반 문장 명확화 및 중복 제거</li>
+        </ul>
+      </div>
+      <div class="quality-card q2 reveal reveal-delay-1">
+        <div class="quality-icon">⚖️</div>
+        <div class="quality-title">객관성 확보</div>
+        <ul class="quality-list">
+          <li>18개 법정 항목 정량적 자동 점검</li>
+          <li>FP 측정 기준의 표준화된 적용</li>
+          <li>사람 판단 편향 배제한 AI 진단</li>
+        </ul>
+      </div>
+      <div class="quality-card q3 reveal reveal-delay-2">
+        <div class="quality-icon">🏆</div>
+        <div class="quality-title">신뢰성 강화</div>
+        <ul class="quality-list">
+          <li>이중 검증 체계 (자동측정 + 자동검증)</li>
+          <li>IFPUG CPM 4.3.1 국제 표준 준수</li>
+          <li>감사·분쟁 대응 가능한 근거 자동 문서화</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CTA ===================== -->
+<section id="cta">
+  <div class="container cta-content">
+    <h2 class="cta-title">
+      AI가 바꾸는<br>
+      <em>공공 발주의 미래</em>
+    </h2>
+    <p class="cta-sub">7대 솔루션으로 발주담당자의 전문성 격차를 해소하고,<br>가독성·객관성·신뢰성이 검증된 발주 문서를 만듭니다.</p>
+    <button id="open-modal-btn" class="btn-primary" style="font-size:16px;padding:16px 40px;">문의하기</button>
+    <div class="cta-meta">
+      <span>M&amp;M Solutions</span>
+      <span>mnms.kr</span>
+      <span>SW측정전문기업 인증기관</span>
+      <span>특허 제10-232727호</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 문의 모달 ===================== -->
+
+<!-- ===================== 문의 모달 ===================== -->
+<div id="contact-modal" style="display:none;position:fixed;inset:0;z-index:999;background:rgba(7,22,40,0.82);backdrop-filter:blur(6px);align-items:center;justify-content:center;">
+  <div style="background:#fff;border-radius:20px;width:min(560px,94vw);max-height:90vh;overflow-y:auto;box-shadow:0 20px 80px rgba(0,0,0,0.4);position:relative;">
+
+    <!-- 모달 헤더 -->
+    <div style="background:linear-gradient(135deg,#0B1F3A,#1A56A0);padding:32px 36px 28px;border-radius:20px 20px 0 0;position:relative;">
+      <button id="close-modal-btn" style="position:absolute;top:18px;right:18px;background:rgba(255,255,255,0.15);border:none;color:#fff;width:32px;height:32px;border-radius:50%;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;">×</button>
+      <div style="font-size:12px;font-weight:700;letter-spacing:.1em;color:rgba(255,255,255,0.6);margin-bottom:8px;">CONTACT US</div>
+      <div style="font-size:22px;font-weight:700;color:#fff;margin-bottom:4px;">문의</div>
+      <div style="font-size:14px;color:rgba(255,255,255,0.65);">담당자에게 바로 메시지를 보내드립니다</div>
+    </div>
+
+    <!-- 담당자 정보 카드 -->
+    <div style="margin:24px 28px 0;background:#F4F7FB;border-radius:14px;padding:20px 22px;display:flex;gap:18px;align-items:flex-start;border:1px solid rgba(11,31,58,0.08);">
+      <div style="width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#1A56A0,#0D7E8A);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;color:#fff;flex-shrink:0;">김</div>
+      <div style="flex:1;">
+        <div style="font-size:17px;font-weight:700;color:#0B1F3A;margin-bottom:2px;">김종성 <span style="font-size:13px;font-weight:500;color:#6B85A0;">대표이사</span></div>
+        <div style="font-size:12px;color:#1A56A0;font-weight:600;margin-bottom:10px;">CFPS, PMP, CMMI심사원</div>
+        <div style="display:grid;grid-template-columns:auto 1fr;gap:6px 12px;font-size:13px;">
+          <span style="color:#6B85A0;font-weight:600;">전화</span><span style="color:#0B1F3A;">070-7500-8690</span>
+          <span style="color:#6B85A0;font-weight:600;">팩스</span><span style="color:#0B1F3A;">02-747-8693</span>
+          <span style="color:#6B85A0;font-weight:600;">휴대폰</span><span style="color:#0B1F3A;">010-4245-9633</span>
+          <span style="color:#6B85A0;font-weight:600;">이메일</span><span style="color:#1A56A0;"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="e2888d8c858683908ba28f8c8f91cc8990">[email&#160;protected]</a></span>
+          <span style="color:#6B85A0;font-weight:600;">주소</span><span style="color:#0B1F3A;">서울시 서초구 신반포로 47길 68<br>(잠원동 501-8), (우)06530</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 문의 폼 -->
+    <div style="padding:20px 28px 32px;">
+      <div style="font-size:12px;font-weight:700;color:#6B85A0;letter-spacing:.06em;margin-bottom:14px;">메시지 보내기</div>
+      <div id="form-success" style="display:none;background:#e8f7f0;border:1px solid #0D7E8A;border-radius:10px;padding:16px;text-align:center;color:#0D7E8A;font-weight:600;font-size:14px;margin-bottom:16px;">
+        ✅ 메일이 전송되었습니다! 빠른 시일 내에 연락드리겠습니다.
+      </div>
+      <div id="form-error" style="display:none;background:#fdecea;border:1px solid #E24B4A;border-radius:10px;padding:16px;text-align:center;color:#A32D2D;font-weight:600;font-size:14px;margin-bottom:16px;">
+        ❌ 전송에 실패했습니다. 아래 이메일로 직접 연락해 주세요.<br>
+        <a href="/cdn-cgi/l/email-protection#472d2829202326352e072a292a34692c35" style="color:#1A56A0;"><span class="__cf_email__" data-cfemail="a4cecbcac3c0c5d6cde4c9cac9d78acfd6">[email&#160;protected]</span></a>
+      </div>
+      <form id="contact-form">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+          <div>
+            <label style="font-size:12px;font-weight:600;color:#334E6B;display:block;margin-bottom:5px;">성명</label>
+            <input id="f-name" type="text" placeholder="홍길동" style="width:100%;padding:10px 14px;border:1.5px solid #dde3ec;border-radius:8px;font-size:14px;outline:none;font-family:inherit;transition:border-color .2s;" onfocus="this.style.borderColor='#1A56A0'" onblur="this.style.borderColor='#dde3ec'">
+          </div>
+          <div>
+            <label style="font-size:12px;font-weight:600;color:#334E6B;display:block;margin-bottom:5px;">소속 기관/기업</label>
+            <input id="f-org" type="text" placeholder="○○부처 / ○○기업" style="width:100%;padding:10px 14px;border:1.5px solid #dde3ec;border-radius:8px;font-size:14px;outline:none;font-family:inherit;transition:border-color .2s;" onfocus="this.style.borderColor='#1A56A0'" onblur="this.style.borderColor='#dde3ec'">
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+          <div>
+            <label style="font-size:12px;font-weight:600;color:#334E6B;display:block;margin-bottom:5px;">연락처</label>
+            <input id="f-tel" type="tel" placeholder="010-0000-0000" style="width:100%;padding:10px 14px;border:1.5px solid #dde3ec;border-radius:8px;font-size:14px;outline:none;font-family:inherit;transition:border-color .2s;" onfocus="this.style.borderColor='#1A56A0'" onblur="this.style.borderColor='#dde3ec'">
+          </div>
+          <div>
+            <label style="font-size:12px;font-weight:600;color:#334E6B;display:block;margin-bottom:5px;">이메일</label>
+            <input id="f-email" type="email" placeholder="you@example.com" style="width:100%;padding:10px 14px;border:1.5px solid #dde3ec;border-radius:8px;font-size:14px;outline:none;font-family:inherit;transition:border-color .2s;" onfocus="this.style.borderColor='#1A56A0'" onblur="this.style.borderColor='#dde3ec'">
+          </div>
+        </div>
+        <div style="margin-bottom:12px;">
+          <label style="font-size:12px;font-weight:600;color:#334E6B;display:block;margin-bottom:5px;">관심 솔루션</label>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;" id="sol-checks">
+            <label class="sol-label" style="display:flex;align-items:center;gap:5px;font-size:13px;cursor:pointer;padding:6px 12px;border:1.5px solid #dde3ec;border-radius:20px;transition:all .2s;">
+              <input type="checkbox" name="sol" value="전체 솔루션" style="accent-color:#1A56A0;"> 전체
+            </label>
+            <label class="sol-label" style="display:flex;align-items:center;gap:5px;font-size:13px;cursor:pointer;padding:6px 12px;border:1.5px solid #dde3ec;border-radius:20px;transition:all .2s;">
+              <input type="checkbox" name="sol" value="S1-RFP초안작성"> S1 RFP초안
+            </label>
+            <label class="sol-label" style="display:flex;align-items:center;gap:5px;font-size:13px;cursor:pointer;padding:6px 12px;border:1.5px solid #dde3ec;border-radius:20px;transition:all .2s;">
+              <input type="checkbox" name="sol" value="S2-표준템플릿진단"> S2 템플릿진단
+            </label>
+            <label class="sol-label" style="display:flex;align-items:center;gap:5px;font-size:13px;cursor:pointer;padding:6px 12px;border:1.5px solid #dde3ec;border-radius:20px;transition:all .2s;">
+              <input type="checkbox" name="sol" value="S3-법제도진단"> S3 법제도진단
+            </label>
+            <label class="sol-label" style="display:flex;align-items:center;gap:5px;font-size:13px;cursor:pointer;padding:6px 12px;border:1.5px solid #dde3ec;border-radius:20px;transition:all .2s;">
+              <input type="checkbox" name="sol" value="S4-기능점수측정"> S4 FP측정
+            </label>
+            <label class="sol-label" style="display:flex;align-items:center;gap:5px;font-size:13px;cursor:pointer;padding:6px 12px;border:1.5px solid #dde3ec;border-radius:20px;transition:all .2s;">
+              <input type="checkbox" name="sol" value="S5-요구사항진단"> S5 요구사항진단
+            </label>
+            <label class="sol-label" style="display:flex;align-items:center;gap:5px;font-size:13px;cursor:pointer;padding:6px 12px;border:1.5px solid #dde3ec;border-radius:20px;transition:all .2s;">
+              <input type="checkbox" name="sol" value="S6-과업심의지원"> S6 심의지원
+            </label>
+            <label class="sol-label" style="display:flex;align-items:center;gap:5px;font-size:13px;cursor:pointer;padding:6px 12px;border:1.5px solid #dde3ec;border-radius:20px;transition:all .2s;">
+              <input type="checkbox" name="sol" value="S7-FP검증"> S7 FP검증
+            </label>
+          </div>
+        </div>
+        <div style="margin-bottom:18px;">
+          <label style="font-size:12px;font-weight:600;color:#334E6B;display:block;margin-bottom:5px;">문의 내용</label>
+          <textarea id="f-msg" rows="4" placeholder="도입 목적, 사업 규모, 문의사항 등을 자유롭게 적어주세요." style="width:100%;padding:12px 14px;border:1.5px solid #dde3ec;border-radius:8px;font-size:14px;resize:vertical;outline:none;font-family:inherit;line-height:1.65;transition:border-color .2s;" onfocus="this.style.borderColor='#1A56A0'" onblur="this.style.borderColor='#dde3ec'"></textarea>
+        </div>
+        <button id="submit-btn" type="submit" style="width:100%;padding:15px;background:linear-gradient(90deg,#1A56A0,#0D7E8A);color:#fff;border:none;border-radius:10px;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;transition:opacity .2s;" onmouseover="this.style.opacity='.88'" onmouseout="this.style.opacity='1'">
+          메시지 전송하기 →
+        </button>
+        <p style="font-size:11px;color:#aab;text-align:center;margin-top:10px;">📍 서울 서초구 신반포로 47길 68 (잠원동 501-8) | 영업일 기준 1일 내 회신</p>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== FOOTER ===================== -->
+<footer>
+  <div class="container">
+    © 2026 M&M Solutions (엠앤엠솔루션). All rights reserved. | v0.02
+  </div>
+</footer>
+
+<!-- 📦 DATA & SCRIPT — 이 아래 데이터만 수정하면 페이지 내용이 바뀝니다 -->
+<script>
+var painData = [
+  { pct: '73%', label: 'RFP 작성이 가장 어렵다고 응답', desc: 'FP 방식 이해 부족, 보정계수 판단 어려움' },
+  { pct: '62%', label: '대가산정 전문성 부족 호소', desc: 'SW진흥법 18개 항목 미검토로 감사 지적' },
+  { pct: '45%', label: '법제도 준수 검토 누락 경험', desc: 'SW진흥법 제20조 등 법정 항목 미점검' },
+];
+var solCards = [
+  { id: 'S1', name: 'RFP 초안 작성 지원', kpi: '작성 시간 70% 절감', stage: '5단계' },
+  { id: 'S2', name: '표준 템플릿 활용 진단', kpi: '템플릿 준수율 100%', stage: '5단계' },
+  { id: 'S3', name: '18개 법제도 준수 진단', kpi: '감사 지적 리스크 제로화', stage: '5단계' },
+  { id: 'S4', name: '기능점수 자동 측정', kpi: 'IFPUG CPM 4.3.1 기준', stage: '4단계' },
+  { id: 'S5', name: '요구사항 상세화 진단', kpi: '명확성·완전성·측정가능성', stage: '3·5단계' },
+  { id: 'S6', name: '과업심의 지원 도구', kpi: '준비 시간 50% 이상 단축', stage: '6단계' },
+  { id: 'S7', name: 'FP 자동 검증 지원', kpi: '이중 검증으로 신뢰성 확보', stage: '4·7단계' },
+];
+var flowSteps = [
+  { num: 1, name: '사업기획', stars: '', badges: [], highlight: false },
+  { num: 2, name: '예산확보', stars: '', badges: [], highlight: false },
+  { num: 3, name: '사전기획', stars: '', badges: ['S5'], highlight: false },
+  { num: 4, name: '대가산정', stars: '★★★★', badges: ['S4', 'S7'], highlight: true },
+  { num: 5, name: 'RFP작성', stars: '★★★★★', badges: ['S1', 'S2', 'S3', 'S5'], highlight: true },
+  { num: 6, name: '사전규격', stars: '', badges: ['S6'], highlight: false },
+  { num: 7, name: '발주준비', stars: '', badges: ['S7'], highlight: false },
+];
+var solGroups = [
+  {
+    icon: '📝', color: '#1A56A0', bg: 'rgba(26,86,160,0.10)',
+    title: 'RFP 작성 지원 솔루션', sub: 'S1 · S2 · S3',
+    cards: [
+      { id: 'S1', name: 'RFP 초안 작성 지원', kpi: '작성 시간 70% 절감',
+        desc: '사업 목적·범위·기간을 입력하면 AI가 표준 구조의 RFP 초안을 자동 생성합니다.', note: null },
+      { id: 'S2', name: '표준 템플릿 활용 진단', kpi: '템플릿 준수율 100%',
+        desc: '작성된 RFP를 NIPA 표준 템플릿과 비교하여 구조 일치도를 진단합니다.', note: null },
+      { id: 'S3', name: '18개 법제도 준수 진단', kpi: '감사 지적 리스크 제로화',
+        desc: 'SW진흥법 제20조 등 18개 법정 필수항목의 포함 여부를 자동 점검합니다.', note: null },
+    ],
+  },
+  {
+    icon: '📊', color: '#0D7E8A', bg: 'rgba(13,126,138,0.10)',
+    title: 'FP 측정 및 요구사항 진단', sub: 'S4 · S5',
+    cards: [
+      { id: 'S4', name: '기능점수(FP) 자동 측정', kpi: 'IFPUG CPM 4.3.1 기준',
+        desc: 'RFP 요구사항 텍스트를 AI가 분석하여 기능점수를 자동으로 산출합니다.',
+        note: '특허 제10-232727호 기반 자동측정 알고리즘 적용' },
+      { id: 'S5', name: '요구사항 상세화 진단', kpi: '명확성·완전성·측정가능성 자동 진단',
+        desc: '각 요구사항의 명확성·완전성·측정가능성을 AI가 자동으로 진단합니다.',
+        note: '사전기획(3단계)과 RFP 작성(5단계)에서 이중 적용' },
+    ],
+  },
+  {
+    icon: '✅', color: '#E8A020', bg: 'rgba(232,160,32,0.10)',
+    title: '심의 지원 및 FP 검증', sub: 'S6 · S7',
+    cards: [
+      { id: 'S6', name: '과업심의 지원 도구', kpi: '심의 준비 시간 50% 이상 단축',
+        desc: '과업심의위원회 검토를 위한 체크리스트와 분석 보고서를 자동으로 생성합니다.',
+        note: '준비 시간 50% 이상 단축, 검토 누락 항목 자동 식별' },
+      { id: 'S7', name: '기능점수 자동 검증 지원', kpi: '이중 검증으로 최종 신뢰성 확보',
+        desc: 'S4에서 자동 측정된 기능점수의 정확성과 일관성을 독립적으로 검증합니다.',
+        note: '4단계(대가산정)와 7단계(발주 직전) 이중 적용' },
+    ],
+  },
+];
+var effectsData = [
+  { num: '70%↓', title: 'RFP 작성 시간 단축', desc: 'AI 초안 생성 + 자동 진단으로 수작업 대비 작성 시간 대폭 감소' },
+  { num: '100%', title: '법제도 준수율 향상', desc: '18개 항목 자동 점검으로 감사 지적 리스크 제로화' },
+  { num: '95%↑', title: 'FP 측정 정확도', desc: '자동 측정 + 자동 검증의 이중 검증 체계로 신뢰성 확보' },
+  { num: '50%↓', title: '과업심의 소요 시간', desc: '체크리스트 자동 생성으로 심의 준비 시간 절반 이하' },
+];
+
+/* ---- 렌더링 ---- */
+var painGrid = document.getElementById('pain-grid');
+painData.forEach(function(d, i) {
+  painGrid.innerHTML += '<div class="pain-card reveal reveal-delay-' + i + '"><div class="pain-pct">' + d.pct + '</div><div class="pain-label">' + d.label + '</div><div class="pain-desc">' + d.desc + '</div></div>';
+});
+var g1 = document.getElementById('sol-grid-1');
+var g2 = document.getElementById('sol-grid-2');
+solCards.slice(0,4).forEach(function(s) {
+  g1.innerHTML += '<div class="sol-card"><div class="sol-id">' + s.id + '</div><div class="sol-name">' + s.name + '</div><div class="sol-kpi">' + s.kpi + '</div><div class="sol-stage">' + s.stage + '</div></div>';
+});
+solCards.slice(4).forEach(function(s) {
+  g2.innerHTML += '<div class="sol-card"><div class="sol-id">' + s.id + '</div><div class="sol-name">' + s.name + '</div><div class="sol-kpi">' + s.kpi + '</div><div class="sol-stage">' + s.stage + '</div></div>';
+});
+var flowEl = document.getElementById('flow-steps');
+flowSteps.forEach(function(s) {
+  var badges = s.badges.map(function(b){ return '<span class="flow-badge">' + b + '</span>'; }).join('');
+  var stars = s.stars ? '<div class="flow-stars">' + s.stars + '</div>' : '';
+  flowEl.innerHTML += '<div class="flow-step ' + (s.highlight ? 'highlight' : '') + '"><div class="flow-step-num">' + s.num + '</div><div class="flow-step-name">' + s.name + '</div>' + stars + '<div class="flow-badges">' + badges + '</div></div>';
+});
+var detailEl = document.getElementById('sol-detail-groups');
+solGroups.forEach(function(g) {
+  var cards = g.cards.map(function(c, ci) {
+    var note = c.note ? '<div class="sol-detail-note">' + c.note + '</div>' : '';
+    return '<div class="sol-detail-card reveal reveal-delay-' + ci + '"><div class="sol-detail-id">' + c.id + '</div><div class="sol-detail-name">' + c.name + '</div><div class="sol-detail-kpi">' + c.kpi + '</div><div class="sol-detail-desc">' + c.desc + '</div>' + note + '</div>';
+  }).join('');
+  detailEl.innerHTML += '<div class="sol-detail-group"><div class="sol-group-header"><div class="sol-group-icon" style="background:' + g.bg + ';color:' + g.color + '">' + g.icon + '</div><div><div class="sol-group-title">' + g.title + '</div><div class="sol-group-sub">' + g.sub + '</div></div></div><div class="sol-detail-cards ' + (g.cards.length === 2 ? 'col2' : '') + '">' + cards + '</div></div>';
+});
+var effEl = document.getElementById('effects-grid');
+effectsData.forEach(function(e, i) {
+  effEl.innerHTML += '<div class="effect-card reveal reveal-delay-' + (i%2) + '"><div class="effect-num">' + e.num + '</div><div><div class="effect-title">' + e.title + '</div><div class="effect-desc">' + e.desc + '</div></div></div>';
+});
+
+/* ---- 스크롤 애니메이션 ---- */
+var observer = new IntersectionObserver(function(entries) {
+  entries.forEach(function(e) { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(function(el) { observer.observe(el); });
+
+/* ================================================================
+   EmailJS 설정
+   PUBLIC_KEY  : 2ywQDA9uCUiG1J_iB
+   SERVICE_ID  : service_mwio7im
+   TEMPLATE_ID : template_qeyaasu
+   ================================================================ */
+var EJS_PUBLIC_KEY  = '2ywQDA9uCUiG1J_iB';
+var EJS_SERVICE_ID  = 'service_4tad7hj';
+var EJS_TEMPLATE_ID = 'template_qeyaasu';
+
+if (typeof emailjs !== 'undefined') {
+  emailjs.init({ publicKey: EJS_PUBLIC_KEY });
+}
+
+/* ---- 모달 제어 ---- */
+var modal = document.getElementById('contact-modal');
+
+function openModal() {
+  modal.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+  document.getElementById('form-success').style.display = 'none';
+  document.getElementById('form-error').style.display   = 'none';
+  document.getElementById('contact-form').style.display = 'block';
+}
+function closeModal() {
+  modal.style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+document.getElementById('open-modal-btn').addEventListener('click', openModal);
+document.getElementById('close-modal-btn').addEventListener('click', closeModal);
+modal.addEventListener('click', function(e) { if (e.target === modal) closeModal(); });
+document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeModal(); });
+
+/* ---- 체크박스 스타일 ---- */
+document.querySelectorAll('input[name="sol"]').forEach(function(cb) {
+  cb.addEventListener('change', function() {
+    var lbl = this.closest('label');
+    lbl.style.borderColor = this.checked ? '#1A56A0' : '#dde3ec';
+    lbl.style.background  = this.checked ? 'rgba(26,86,160,0.08)' : '';
+    lbl.style.color       = this.checked ? '#1A56A0' : '';
+  });
+});
+
+/* ---- 폼 전송 (EmailJS) ---- */
+document.getElementById('contact-form').addEventListener('submit', function(e) {
+  e.preventDefault();
+
+  var name  = (document.getElementById('f-name').value  || '').trim();
+  var org   = (document.getElementById('f-org').value   || '').trim();
+  var tel   = (document.getElementById('f-tel').value   || '').trim();
+  var email = (document.getElementById('f-email').value || '').trim();
+  var msg   = (document.getElementById('f-msg').value   || '').trim();
+
+  var checked = Array.from(document.querySelectorAll('input[name="sol"]:checked'));
+  var solText = checked.length > 0
+    ? checked.map(function(c) { return '- ' + c.value; }).join('\n')
+    : '- 미선택';
+
+  /* 메일 본문 전체를 message 변수 하나에 담음 */
+  var bodyText =
+    '[문의자 정보]\n' +
+    '성명   : ' + (name  || '(미입력)') + '\n' +
+    '소속   : ' + (org   || '(미입력)') + '\n' +
+    '연락처 : ' + (tel   || '(미입력)') + '\n' +
+    '이메일 : ' + (email || '(미입력)') + '\n\n' +
+    '[관심 솔루션]\n' + solText + '\n\n' +
+    '[문의 내용]\n' + (msg || '(내용 없음)') + '\n\n' +
+    '---\nM&M Solutions | jongdari@mnms.kr | v0.02';
+
+  var btn = document.getElementById('submit-btn');
+  btn.disabled = true;
+  btn.textContent = '전송 중...';
+  btn.style.opacity = '0.7';
+
+  emailjs.send(EJS_SERVICE_ID, EJS_TEMPLATE_ID, { message: bodyText })
+  .then(function(res) {
+    console.log('성공:', res.status, res.text);
+    document.getElementById('contact-form').style.display = 'none';
+    document.getElementById('form-error').style.display   = 'none';
+    document.getElementById('form-success').style.display = 'block';
+    setTimeout(function() {
+      document.getElementById('contact-form').reset();
+      document.getElementById('contact-form').style.display = 'block';
+      document.getElementById('form-success').style.display = 'none';
+      document.querySelectorAll('input[name="sol"]').forEach(function(cb) {
+        var lbl = cb.closest('label');
+        lbl.style.borderColor = '#dde3ec';
+        lbl.style.background  = '';
+        lbl.style.color       = '';
+      });
+      btn.disabled = false;
+      btn.textContent = '메시지 전송하기 →';
+      btn.style.opacity = '1';
+    }, 4000);
+  })
+  .catch(function(err) {
+    console.error('실패:', JSON.stringify(err));
+    var code = err && err.status ? err.status : '?';
+    var errDiv = document.getElementById('form-error');
+    errDiv.innerHTML =
+      '\u274c 전송 실패 (오류 ' + code + '). ' +
+      '<a href="mailto:jongdari@mnms.kr" style="color:#1A56A0;">jongdari@mnms.kr</a>로 직접 연락해 주세요.';
+    errDiv.style.display = 'block';
+    btn.disabled = false;
+    btn.textContent = '메시지 전송하기 →';
+    btn.style.opacity = '1';
+  });
+});
+</script>
+</body>
+</html>
